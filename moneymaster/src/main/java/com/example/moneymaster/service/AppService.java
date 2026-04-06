@@ -38,7 +38,7 @@ public class AppService implements UserDetailsService {
         AppUser newUser = new AppUser(appRegistration.getUserName(),
                 passwordEncoder.bcryptpasswordEncoder().encode(appRegistration.getPassword()),
                 appRegistration.getEmail(),
-                AppRole.USER,
+                AppRole.ANALYST,
                 token);
         userRepository.save(newUser);
         confirmationTokenRepository.save(new ConfirmationToken(token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), newUser));

@@ -3,7 +3,6 @@ package com.example.moneymaster.repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
@@ -21,7 +20,11 @@ import com.example.moneymaster.model.FinancialRecord;
 @Transactional(readOnly = true)
 public interface FinancialRecordRepository extends JpaRepository<FinancialRecord, Long> {
 
-    Optional<FinancialRecord> findByAppUserId(AppUser appUser);
+    @Query("SELECT f FROM FinancialRecord f WHERE f.appUser = ?1")
+    List<FinancialRecord> findByAppUserId(AppUser appUser);
+
+    @Query("SELECT f FROM FinancialRecord f WHERE f.appUser = ?1 AND f.id = ?2")
+    FinancialRecord findByAppUserIdandId(AppUser appUser, Long id);
 
     @Query("Select SUM(r.amount) FROM FinancialRecord r WHERE r.appUser = ?1 AND r.type = 'EXPENSE'")
     Double findTotalExpenseByAppUserId(AppUser appUser);
@@ -31,6 +34,9 @@ public interface FinancialRecordRepository extends JpaRepository<FinancialRecord
 
     @Query("Select SUM(r.amount) FROM FinancialRecord r WHERE r.appUser = ?1 AND r.type = ?2")
     Double findTotalByAppUserIdAndType(AppUser appUser, TransactionType type);
+
+    @Query("Select SUM(r.amount) FROM FinancialRecord r WHERE r.appUser = ?1 AND r.category = ?2")
+    Double findTotalByAppUserIdAndCategory(AppUser appUser, String category);
 
     @Query("Select SUM(r.amount) FROM FinancialRecord r WHERE r.appUser = ?1 AND r.type = ?2 AND r.category = ?3")
     Double findTotalByAppUserIdAndTypeAndCategory(AppUser appUser, TransactionType type, String category);

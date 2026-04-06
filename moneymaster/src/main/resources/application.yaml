@@ -6,9 +6,6 @@ spring:
   application:
     name: moneymaster
   datasource:
-    url: jdbc:postgresql://localhost:5432/moneymaster
-    username: postgres
-    password: possql312
   jpa:
     hibernate:
       ddl-auto: update
